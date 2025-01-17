@@ -1,0 +1,16 @@
+{
+  "name": "Pinecone",
+  "urlPart": "pinecone",
+  "key": "pinecone",
+  "description": "",
+  "modules": [
+    {
+      "id": "app-1",
+      "name": "App",
+      "urlPart": "app",
+      "key": "app",
+      "description": "",
+      "version": 1
+    }
+  ]
+}

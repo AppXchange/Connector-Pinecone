@@ -1,0 +1,47 @@
+{
+  "profiles": {
+    "Connector": {
+      "commandName": "Project"
+    },
+    "Action Processor Index": {
+      "commandName": "Project",
+      "commandLineArgs": "--isLocal true --moduleId app-1 --serviceType ActionProcessor --dataObjectUrl index --actionUrl create",
+      "environmentVariables": {
+        "DIFFYCACHE_DBLOCATION": "./databases",
+        "ESR__QueueName": "localrun"
+      }
+    },
+    "Action Processor Vector": {
+      "commandName": "Project",
+      "commandLineArgs": "--isLocal true --moduleId app-1 --serviceType ActionProcessor --dataObjectUrl vector --actionUrl create",
+      "environmentVariables": {
+        "DIFFYCACHE_DBLOCATION": "./databases",
+        "ESR__QueueName": "localrun"
+      }
+    },
+    "Action Processor Embed": {
+      "commandName": "Project",
+      "commandLineArgs": "--isLocal true --moduleId app-1 --serviceType ActionProcessor --dataObjectUrl embed --actionUrl create",
+      "environmentVariables": {
+        "DIFFYCACHE_DBLOCATION": "./databases",
+        "ESR__QueueName": "localrun"
+      }
+    },
+    "Cache Writer Local Development": {
+      "commandName": "Project",
+      "commandLineArgs": "--isLocal true --moduleId app-1 --serviceType CacheWriter",
+      "environmentVariables": {
+        "DIFFYCACHE_DBLOCATION": "./databases",
+        "ESR__QueueName": "localrun"
+      }
+    },
+    "Test Connection Local Development": {
+      "commandName": "Project",
+      "commandLineArgs": "--isLocal true --testingConnection true",
+      "environmentVariables": {
+        "DIFFYCACHE_DBLOCATION": "./databases",
+        "ESR__QueueName": "localrun"
+      }
+    }
+  }
+}
