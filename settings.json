@@ -1,0 +1,16 @@
+{
+  "name": "Pinecone",
+  "urlPart": "pinecone",
+  "key": "pinecone",
+  "description": "Pinecone is a managed vector database designed to make it easy to build, deploy, and scale vector-based applications. It is particularly useful for applications involving machine learning, artificial intelligence, and natural language processing.",
+  "modules": [
+    {
+      "id": "app-1",
+      "name": "App",
+      "urlPart": "app",
+      "key": "app",
+      "description": "Main application module for Pinecone.",
+      "version": 1
+    }
+  ]
+}
