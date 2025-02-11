@@ -22,21 +22,19 @@ namespace Connector.Client;
 public class ApiClient
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly TestSettings? _testSettings;
+    private readonly ActionProcessor _actionProcessor;
     public JsonSerializerOptions JsonOptions { get; }
 
-    public ApiClient(IHttpClientFactory httpClientFactory)
+    public ApiClient(IHttpClientFactory httpClientFactory, ActionProcessor actionProcessor)
     {
         _httpClientFactory = httpClientFactory;
+        _actionProcessor = actionProcessor;
         
         JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
-        var jsonContent = File.ReadAllText("test-settings.json");
-        _testSettings = JsonSerializer.Deserialize<TestSettings>(jsonContent, JsonOptions);
     }
 
     private HttpClient CreateClient(string baseUrl, string apiKey)
@@ -51,10 +49,9 @@ public class ApiClient
     // Vector Operations
     public async Task<ApiResponse<VectorDataObject>> UpsertVector(VectorDataObject vector, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Vector?.IndexHost ?? string.Empty,
-            actionProcessor?.Vector?.ApiKey ?? string.Empty
+            _actionProcessor.Vector.IndexHost,
+            _actionProcessor.Vector.ApiKey
         );
 
         var request = new
@@ -86,10 +83,9 @@ public class ApiClient
     // Index Operations
     public async Task<ApiResponse<IndexDataObject>> CreateIndex(IndexDataObject index, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
 
         var request = new
@@ -124,10 +120,9 @@ public class ApiClient
 
     public async Task<ApiResponse> DeleteIndex(string indexName, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.DeleteAsync($"databases/{indexName}", cancellationToken);
 
@@ -142,10 +137,9 @@ public class ApiClient
     // Embed Operations
     public async Task<ApiResponse<EmbedDataObject>> GenerateEmbeddings(EmbedDataObject embed, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Embed?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Embed?.ApiKey ?? string.Empty
+            _actionProcessor.Embed.BaseUrl,
+            _actionProcessor.Embed.ApiKey
         );
 
         var request = new
@@ -183,10 +177,9 @@ public class ApiClient
 
     public async Task<ApiResponse> TestConnection(CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.GetAsync("describe-index-stats", cancellationToken);
 
@@ -200,10 +193,9 @@ public class ApiClient
 
     public async Task<ApiResponse<List<IndexDataObject>>> GetIndexes(CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.GetAsync("indexes", cancellationToken);
         
@@ -238,10 +230,9 @@ public class ApiClient
 
     public async Task<ApiResponse<List<VectorDataObject>>> FetchVectors(CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.PostAsync("/vectors/fetch", null, cancellationToken);
         return new ApiResponse<List<VectorDataObject>>
@@ -254,10 +245,9 @@ public class ApiClient
 
     public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.PostAsync(requestUri, content, cancellationToken);
         return response;
@@ -265,10 +255,9 @@ public class ApiClient
 
     public async Task<HttpResponseMessage> GetAsync(string requestUri, CancellationToken cancellationToken = default)
     {
-        var actionProcessor = _testSettings?.Settings?.App1?.ServiceConfiguration?.ActionProcessor;
         using var client = CreateClient(
-            actionProcessor?.Index?.BaseUrl ?? "https://api.pinecone.io/",
-            actionProcessor?.Index?.ApiKey ?? string.Empty
+            _actionProcessor.Index.BaseUrl,
+            _actionProcessor.Index.ApiKey
         );
         var response = await client.GetAsync(requestUri, cancellationToken);
         return response;

@@ -1,4 +1,3 @@
-using System;
 using Xchange.Connector.SDK.Client.AuthTypes;
 using Xchange.Connector.SDK.Client.ConnectionDefinitions.Attributes;
 
@@ -13,21 +12,7 @@ public class ApiKeyAuth : IApiKeyAuth
     [ConnectionProperty(title: "Connection Environment", description: "", isRequired: true, isSensitive: false)]
     public ConnectionEnvironmentApiKeyAuth ConnectionEnvironment { get; set; } = ConnectionEnvironmentApiKeyAuth.Unknown;
 
-    public string BaseUrl
-    {
-        get
-        {
-            switch (ConnectionEnvironment)
-            {
-                case ConnectionEnvironmentApiKeyAuth.Production:
-                    return "https://api.pinecone.io";
-                case ConnectionEnvironmentApiKeyAuth.Test:
-                    return "https://api.pinecone.io";
-                default:
-                    throw new Exception("No base url was set.");
-            }
-        }
-    }
+    public string BaseUrl => "https://api.pinecone.io";
 }
 
 public enum ConnectionEnvironmentApiKeyAuth

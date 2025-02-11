@@ -1,0 +1,265 @@
+{
+  "name": "Pinecone",
+  "urlPart": "pinecone",
+  "key": "pinecone",
+  "description": "Pinecone is a managed vector database designed to make it easy to build, deploy, and scale vector-based applications. It is particularly useful for applications involving machine learning, artificial intelligence, and natural language processing.",
+  "connectionDefinitions": [
+    {
+      "key": "apiKeyAuth",
+      "name": "ApiKeyAuth",
+      "description": "",
+      "attributes": [
+        {
+          "title": "ApiKey",
+          "key": "apiKey",
+          "isSensitive": true,
+          "isRequired": true,
+          "description": ""
+        },
+        {
+          "title": "Connection Environment",
+          "key": "connectionEnvironment",
+          "isSensitive": false,
+          "isRequired": true,
+          "description": "",
+          "options": [
+            {
+              "label": "Production",
+              "value": 1
+            },
+            {
+              "label": "Test",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "type": "Standard"
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "RetryPolicy": {
+        "type": "object",
+        "properties": {
+          "MaxRetries": {
+            "type": "integer",
+            "description": "Maximum number of retry attempts for failed requests."
+          },
+          "InitialRetryDelaySeconds": {
+            "type": "integer",
+            "description": "Initial delay between retry attempts in seconds."
+          },
+          "UseExponentialBackoff": {
+            "type": "boolean",
+            "description": "Whether to use exponential backoff for retry delays."
+          }
+        },
+        "title": "Retry Policy",
+        "description": "Configuration for HTTP request retry behavior."
+      },
+      "ApiClient": {
+        "type": "object",
+        "properties": {
+          "TimeoutSeconds": {
+            "type": "integer",
+            "description": "Timeout for API requests in seconds."
+          },
+          "UseCompression": {
+            "type": "boolean",
+            "description": "Whether to compress request content when possible."
+          },
+          "MaxConcurrentRequests": {
+            "type": "integer",
+            "description": "Maximum number of concurrent API requests."
+          }
+        },
+        "title": "API Client",
+        "description": "Configuration for the Pinecone API client."
+      },
+      "Service": {
+        "type": "object",
+        "properties": {
+          "TimeoutSeconds": {
+            "type": "integer",
+            "description": "Default timeout for service operations in seconds."
+          },
+          "MaxConcurrentOperations": {
+            "type": "integer",
+            "description": "Maximum number of concurrent operations."
+          }
+        },
+        "title": "Service Configuration",
+        "description": "Configuration for the service."
+      }
+    },
+    "title": "Connector Registration Configuration",
+    "description": "Configuration settings for the Pinecone connector."
+  },
+  "modules": [
+    {
+      "name": "App",
+      "urlPart": "app",
+      "key": "app",
+      "description": "Main application module for Pinecone.",
+      "version": 1,
+      "services": [
+        {
+          "name": "pinecone/app/1 Action Processor",
+          "type": "ActionProcessor",
+          "configSchema": {
+            "type": "object",
+            "properties": {
+              "Vector": {
+                "type": "object",
+                "properties": {
+                  "ApiKey": {
+                    "type": "string",
+                    "description": "API Key for accessing the vector service"
+                  },
+                  "IndexHost": {
+                    "type": "string",
+                    "description": "Host URL for the vector index"
+                  }
+                },
+                "required": [
+                  "ApiKey",
+                  "IndexHost"
+                ],
+                "title": "Vector Configuration",
+                "description": "Configuration for vector-related operations"
+              },
+              "Index": {
+                "type": "object",
+                "properties": {
+                  "ApiKey": {
+                    "type": "string",
+                    "description": "API Key for accessing the index service"
+                  },
+                  "BaseUrl": {
+                    "type": "string",
+                    "description": "Base URL for the index service"
+                  }
+                },
+                "required": [
+                  "ApiKey",
+                  "BaseUrl"
+                ],
+                "title": "Index Configuration",
+                "description": "Configuration for index-related operations"
+              },
+              "Embed": {
+                "type": "object",
+                "properties": {
+                  "ApiKey": {
+                    "type": "string",
+                    "description": "API Key for accessing the embedding service"
+                  },
+                  "BaseUrl": {
+                    "type": "string",
+                    "description": "Base URL for the embedding service"
+                  },
+                  "DefaultModel": {
+                    "type": "string",
+                    "description": "Default model to use for embedding generation"
+                  },
+                  "MaxBatchSize": {
+                    "type": "integer",
+                    "description": "Maximum batch size for embedding requests"
+                  }
+                },
+                "required": [
+                  "ApiKey",
+                  "BaseUrl",
+                  "DefaultModel"
+                ],
+                "title": "Embed Configuration",
+                "description": "Configuration for embedding-related operations"
+              },
+              "CreateVectorHandlerConfig": {
+                "type": "object",
+                "properties": {
+                  "ProcessQueuedEvent": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Create Vector Handler Configuration",
+                "description": "Configuration for vector creation handler"
+              },
+              "CreateIndexHandlerConfig": {
+                "type": "object",
+                "properties": {
+                  "ProcessQueuedEvent": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Create Index Handler Configuration",
+                "description": "Configuration for index creation handler"
+              },
+              "CreateEmbedHandlerConfig": {
+                "type": "object",
+                "properties": {
+                  "ProcessQueuedEvent": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Create Embed Handler Configuration",
+                "description": "Configuration for embed creation handler"
+              }
+            },
+            "required": [
+              "Vector",
+              "Index",
+              "Embed"
+            ],
+            "title": "App V1 Action Processor Configuration",
+            "description": "Configuration of the data object actions for the module."
+          }
+        },
+        {
+          "name": "pinecone/app/1 Cache Writer",
+          "type": "CacheWriter",
+          "configSchema": {
+            "type": "object",
+            "properties": {
+              "Vector": {
+                "type": "object",
+                "properties": {
+                  "UploadObject": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Vector Configuration",
+                "description": "Configuration for vector data caching"
+              },
+              "Index": {
+                "type": "object",
+                "properties": {
+                  "UploadObject": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Index Configuration",
+                "description": "Configuration for index data caching"
+              },
+              "Embed": {
+                "type": "object",
+                "properties": {
+                  "UploadObject": {
+                    "type": "boolean"
+                  }
+                },
+                "title": "Embed Configuration",
+                "description": "Configuration for embed data caching"
+              }
+            },
+            "title": "App V1 Cache Writer Configuration",
+            "description": "Configuration of the data object caches for the module."
+          }
+        }
+      ],
+      "dataObjects": []
+    }
+  ]
+}

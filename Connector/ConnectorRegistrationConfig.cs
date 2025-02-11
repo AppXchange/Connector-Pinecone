@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Connector.Client;
 
 namespace Connector;
 
@@ -31,6 +32,14 @@ public class ConnectorRegistrationConfig
     [Description("Configuration for the service.")]
     [System.ComponentModel.DataAnnotations.Required]
     public ServiceConfig Service { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the authentication configuration.
+    /// </summary>
+    [Title("Authentication")]
+    [Description("Authentication settings for the Pinecone API.")]
+    [System.ComponentModel.DataAnnotations.Required]
+    public AuthConfig Auth { get; set; } = new();
 }
 
 /// <summary>
@@ -94,4 +103,18 @@ public class ServiceConfig
     [Description("Maximum number of concurrent operations.")]
     [Range(1, 100)]
     public int MaxConcurrentOperations { get; set; } = 10;
+}
+
+/// <summary>
+/// Configuration for authentication settings.
+/// </summary>
+public class AuthConfig
+{
+    /// <summary>
+    /// Gets or sets the API key configuration.
+    /// </summary>
+    [Title("API Key")]
+    [Description("API key authentication settings.")]
+    [System.ComponentModel.DataAnnotations.Required]
+    public ApiKeyAuth ApiKey { get; set; } = new();
 }

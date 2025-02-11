@@ -50,6 +50,9 @@ public class ConnectorRegistration :
 
             serviceCollection.AddScoped<ApiClient>();
 
+            // Register auth configuration
+            serviceCollection.AddSingleton<IApiKeyAuth>(connectorRegistrationConfig.Auth.ApiKey);
+
             // Add logging
             serviceCollection.AddLogging(builder =>
             {

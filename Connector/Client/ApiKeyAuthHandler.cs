@@ -32,11 +32,17 @@ public class ApiKeyAuthHandler : DelegatingHandler
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrEmpty(_apiKeyAuth.ApiKey))
+        {
+            throw new System.InvalidOperationException("API key is not configured");
+        }
+
         // Add API key to header
         request.Headers.Add("Api-Key", _apiKeyAuth.ApiKey);
 
         // Add common headers for Pinecone API
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Add("Accept-Encoding", "gzip, deflate");
         
         if (request.Content != null)
         {

@@ -1,0 +1,13 @@
+Feedback for Submission with Id: 8110ac72-7c18-47ea-afc4-9c40f836301f
+
+Comments for Submission:
+
+Comments for Connector code:
+File: Connector/Client/ApiClient.cs
+Line: 38
+the ApiClient file should be independently functional - test-settings.json would be used to mock up data according to https://trimble-xchange.github.io/connector-docs/guides/local-testing/ 
+--------------------------------------------------------------------------------
+File: Connector/Connections/ApiKeyAuth.cs
+Line: 23
+You can remove the switch statement with only one baseUrl to avoid a redundant dropdown. 
+--------------------------------------------------------------------------------
